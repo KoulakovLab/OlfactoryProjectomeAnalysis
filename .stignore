@@ -1,0 +1,5 @@
+// Stignore file
+// This is due to this directory being under sycthing version control
+
+// Exclude everything; this is under VCS control
+/*

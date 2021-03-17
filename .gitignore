@@ -1,0 +1,16 @@
+# Don't get anything in the data directory.
+!/data
+
+# Don't grab any database or figure files
+**.mat
+**.fig
+
+# If there is a folder called presentation; only grab certain file types.
+presentation/**
+!presentation/**.tex
+!presentation/**.svg
+!presentation/**.png
+!presentation/**.fig
+!presentation/**.pdf
+!presentation/**.otf
+!presentation/**.pptx
