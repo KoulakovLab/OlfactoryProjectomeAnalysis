@@ -12,6 +12,7 @@ analysis_formatData;
 analysis_classification;
 analysis_statistics;
 
+% Create figures
 figure_classifier;
 figure_obInjection;
 figure_tiling;

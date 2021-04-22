@@ -733,6 +733,7 @@ toc(STARTTIME)
 table_mitral = obdata_mitral.data.OBPC.oTable;
 table_narrow = obdata_lowipr.data.OBPC.oTable;
 table_broad = obdata_highipr.data.OBPC.oTable;
+table_pcInj = pcdata.data.PCout.oTable;
 
 filenames = {'data/table'};
 for f = 1:length(filenames)
@@ -741,7 +742,9 @@ for f = 1:length(filenames)
   writetable(table_mitral, [filename, '_mitral.csv'], 'WriteRowNames', true);
   writetable(table_narrow, [filename, '_narrow.csv'], 'WriteRowNames', true);
   writetable(table_broad,  [filename, '__broad.csv'], 'WriteRowNames', true);
-  writetable(table_mitral, [filename, 's.xlsx'], 'WriteRowNames', true, 'Sheet', 'Mitral', 'Range', 'A1');
-  writetable(table_narrow, [filename, 's.xlsx'], 'WriteRowNames', true, 'Sheet', 'Narrow', 'Range', 'A1');
-  writetable(table_broad,  [filename, 's.xlsx'], 'WriteRowNames', true, 'Sheet', 'Broad', 'Range', 'A1');
+  writetable(table_pcInj,  [filename, '_PCinjections.csv'], 'WriteRowNames', true);
+  writetable(table_mitral, [filename, 's.xlsx'], 'WriteRowNames', true, 'Sheet', 'Mitral',        'Range', 'A1');
+  writetable(table_narrow, [filename, 's.xlsx'], 'WriteRowNames', true, 'Sheet', 'Narrow',        'Range', 'A1');
+  writetable(table_broad,  [filename, 's.xlsx'], 'WriteRowNames', true, 'Sheet', 'Broad',         'Range', 'A1');
+  writetable(table_pcInj,  [filename, 's.xlsx'], 'WriteRowNames', true, 'Sheet', 'PC Injection',  'Range', 'A1');
 end

@@ -35,6 +35,8 @@ end
 
 lc_vals = linspace(0, 1, sN);
 sto_names = obdata_mitral.prjRegName([1, 4, 5, 6]);
+corrRval = zeros(4, 1);
+corrPval = zeros(4, 1);
 
 for i = 1:4
   sto_plt = subplot(2, 2, i);
@@ -42,8 +44,9 @@ for i = 1:4
     ob_vals(1:end, i), ...
     pc_vals(1:end, i), 100, ...
     lc_vals(1:end), 'filled', 'MarkerEdgeColor', 'k');
-  [sto_cor, ~, sto_cpv] = aux.spear( ...
-    ob_vals(1:end, i), pc_vals(1:end, i))
+  [sto_cor, sto_cpv] = corr(ob_vals(1:end, i), pc_vals(1:end, i), 'type', 'Spearman');
+  corrRval(i) = sto_cor;
+  corrPval(i) = sto_cpv;
   colormap(CON_CMAP(256));
   caxis([0 1]);
   if i == 1

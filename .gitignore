@@ -1,5 +1,5 @@
 # Don't get anything in the data directory.
-!/data
+/data
 
 # Don't grab any database or figure files
 **.mat
