@@ -5,11 +5,21 @@ function newstatOB(set, BOOT)
 %   signs
 % 3. Shuffle slices to calculate pvalue wrt shuffling
 %#ok<*UNRCH>
-rng('default');
 USE_NORMALPDF = true;
 CROSSVAL = 10;
 pval_est = @(t, n) 2 * min(tcdf(t.*sqrt((n-2)./(1-t.^2)), n), tcdf(t.*sqrt((n-2)./(1-t.^2)), n, 'upper'));
 PMIN = 1/BOOT;
+% Useful
+n_brc = size(regmat, 1);
+n_reg = size(regmat, 2);
+n_apc = size(apcmat, 2);
+n_ppc = size(ppcmat, 2);
+n_sli = size(pcmat, 2);
+% Barcode shuffling stuff
+rng('default');
+bar_boot = ceil(n_brc * rand(n_brc, BOOT));
+% Seed RNG
+rng('default');
 
 % Store variables here
 outstr = struct();
@@ -24,12 +34,6 @@ apcmat = set.prjImg(:, set.prjRegInd{2});
 ppcmat = set.prjImg(:, set.prjRegInd{3});
 pcmat = [apcmat, ppcmat];
 
-% Useful
-n_brc = size(regmat, 1);
-n_reg = size(regmat, 2);
-n_apc = size(apcmat, 2);
-n_ppc = size(ppcmat, 2);
-n_sli = size(pcmat, 2);
 % Limits for fitting
 l_spl = [1 - 1e-5; n_apc + .5; n_sli];
 l_lin = [1 - 1e-5; n_sli];
@@ -40,6 +44,16 @@ l_ppc = [1 - 1e-5; n_ppc];
 outstr.conProb_pc = aux.conProb(regmat, pcmat);
 outstr.conProb_apc = outstr.conProb_pc(:, 1:n_apc);
 outstr.conProb_ppc = outstr.conProb_pc(:, n_apc + (1:n_ppc));
+
+% Calculate statistics on these quantities using bootstrap
+this_mat = zeros([size(outstr.conProb_pc), BOOT]);
+for b = 1:BOOT
+  this_mat(:, :, b) = aux.conProb( ...
+    regmat(bar_boot(:, b), :), ...
+    pcmat(bar_boot(:, b), :));
+end
+outstr.conProb_pc_sdev = std(this_mat, 0, 3);
+outstr.conProb_pc_mean = mean(this_mat, 3);
 
 % 1. Calculate spearman correlation between regions and PC
 [outstr.conProb_pc_sprCorr, outstr.conProb_pc_sprCorrPval] = ...
