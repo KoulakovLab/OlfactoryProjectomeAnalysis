@@ -9,6 +9,15 @@ USE_NORMALPDF = true;
 CROSSVAL = 10;
 pval_est = @(t, n) 2 * min(tcdf(t.*sqrt((n-2)./(1-t.^2)), n), tcdf(t.*sqrt((n-2)./(1-t.^2)), n, 'upper'));
 PMIN = 1/BOOT;
+% Collapse the regions into one; use only mitral cell data
+regmat = [ ...
+  sum(set.prjImg(:, set.prjRegInd{1}), 2), ...
+  sum(set.prjImg(:, set.prjRegInd{4}), 2), ...
+  sum(set.prjImg(:, set.prjRegInd{5}), 2), ...
+  sum(set.prjImg(:, set.prjRegInd{6}), 2)];
+apcmat = set.prjImg(:, set.prjRegInd{2});
+ppcmat = set.prjImg(:, set.prjRegInd{3});
+pcmat = [apcmat, ppcmat];
 % Useful
 n_brc = size(regmat, 1);
 n_reg = size(regmat, 2);
@@ -23,16 +32,6 @@ rng('default');
 
 % Store variables here
 outstr = struct();
-
-% Collapse the regions into one; use only mitral cell data
-regmat = [ ...
-  sum(set.prjImg(:, set.prjRegInd{1}), 2), ...
-  sum(set.prjImg(:, set.prjRegInd{4}), 2), ...
-  sum(set.prjImg(:, set.prjRegInd{5}), 2), ...
-  sum(set.prjImg(:, set.prjRegInd{6}), 2)];
-apcmat = set.prjImg(:, set.prjRegInd{2});
-ppcmat = set.prjImg(:, set.prjRegInd{3});
-pcmat = [apcmat, ppcmat];
 
 % Limits for fitting
 l_spl = [1 - 1e-5; n_apc + .5; n_sli];
