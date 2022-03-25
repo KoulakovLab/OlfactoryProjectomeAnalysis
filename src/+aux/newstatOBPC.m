@@ -1,4 +1,4 @@
-function newstatOB(set, BOOT)
+function newstatOBPC(set, BOOT)
 %NEWSTATOB Three things that are, ugh . . .
 % 1. Spearman correlation
 % 2. Bootstrap slices for fit slope; check how often the slope changes
