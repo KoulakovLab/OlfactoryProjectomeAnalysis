@@ -13,7 +13,7 @@
 %       - yc109 + yc111
 %   * Conditional probability of all cells (compared to mitral only)
 %   * Conditional probability; of tufted cells; but with OT instead of PC
-figure2 = gobjects(9, 1);
+figure2 = gobjects(10, 1);
 CONFINT = .95;
 STDAMNT = norminv(.5 * (1 + CONFINT));
 
@@ -472,9 +472,47 @@ yticklabels(obdata_highipr.prjRegName([1, 2, 3, 5, 6]));
 B = colorbar;
 title(B, 'P_{OB \rightarrow OT}(OB \rightarrow reg.) broad');
 set(gca, 'fontsize', 20);
+
 % Plot
 subplot(2, 2, 4);
 aux.otmatPlotNEW(obdata_highipr);
-
-
 savefig(figure2(8:9), 'data/figures/obInjection_OT.fig');
+
+%% FIGURE ???: Histograms of different raw barcode counts
+figure2(10) = figure;
+clf(figure2(10));
+set(figure2(10), 'name', 'Barcode counts');
+sto_counts_all = sum(vertcat(data_ob.prjImg), 1);
+sto_avgCounts = cell2mat(cellfun(@(x) mean(x, 1, 'omitnan'), ...
+  {data_ob.prjImg}, 'UniformOutput', 0)');
+% Aggregate plot
+subplot(2, 1, 1);
+plot(sto_counts_all);
+xlabel('Slices');
+ylabel('Total Count');
+title('Total projection strength per slice');
+xticks(cellfun(@mean, data_ob(1).prjRegInd));
+xticklabels(data_ob(1).prjRegName);
+xlim([1, data_ob(1).nPrjSli]);
+this_y = ylim;
+for r = 1:(data_ob(1).nPrjReg - 1)
+  line([1, 1] * (data_ob(1).prjRegInd{r}(end) + .5), this_y, 'Color', 'k');
+end
+ylim(this_y);
+% Different brains
+subplot(2, 1, 2);
+plot(sto_avgCounts');
+legend({data_ob.name}, 'Location', 'southoutside', ...
+  'NumColumns', length(data_ob), 'AutoUpdate', false);
+xlabel('Slices');
+ylabel('Average (per barcode) Count');
+title('Total projection strength per slice');
+xticks(cellfun(@mean, data_ob(1).prjRegInd));
+xticklabels(data_ob(1).prjRegName);
+xlim([1, data_ob(1).nPrjSli]);
+this_y = ylim;
+for r = 1:(data_ob(1).nPrjReg - 1)
+  line([1, 1] * (data_ob(1).prjRegInd{r}(end) + .5), this_y, 'Color', 'k');
+end
+ylim(this_y);
+
